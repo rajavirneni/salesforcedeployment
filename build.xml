@@ -1,0 +1,36 @@
+<project name="Cydcor Salesforce Deployment" basedir="." xmlns:sf="antlib:com.salesforce">
+	<!-- Load in Ant-Contrib to give us access to some very useful tasks! -->
+    <!-- the .jar file is located in the tools directory -->
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="${basedir}/build/tools/ant-salesforce.jar"/>
+        </classpath>
+    </taskdef>
+
+    <!--<taskdef resource="com/salesforce/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${basedir}/build/tools/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef> -->
+    
+	<!-- Deploy vars secured here -->
+	<property environment="ENV"/>
+    <property file="config/default.properties"/>
+    <property file="config/project.properties"/>
+    <!---->
+    
+    <!-- Retrieving from HtzSales -->
+    <target name="retrieveDemo">
+        <echo message="------------------------ retrieving metadata from demo -------------------------------" />
+        <sf:retrieve username="${demo.username}" password="${demo.password}" serverurl="${demo.serverurl}" pollWaitMillis="${demo.pollWaitMillis}" maxPoll="${demo.maxPoll}" unpackaged="salesforce/src/package.xml" retrieveTarget="salesforce/src" />
+        <echo message="------------------------ Done retrieving metadata from demo -------------------------------" />
+    </target>
+
+    <!-- Deploy the unpackaged set of metadata retrieved from HtzSales to HtzSlsFR -->
+    <target name="deployDemo">
+        <echo message="------------------------ Deploying metadata retrieved from demo to demo1 -------------------------------" />
+        <sf:deploy username="${demo1.username}" password="${demo1.password}" serverurl="${demo1.serverurl}" pollWaitMillis="${demo1.pollWaitMillis}" maxPoll="${demo1.maxPoll}" deployRoot="salesforce/src" logType="Debugonly"/>
+        <echo message="------------------------ Done Deploying metadata retrieved from demo to demo1 -------------------------------" />
+    </target>
+
+</project>
